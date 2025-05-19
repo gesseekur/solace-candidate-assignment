@@ -9,6 +9,7 @@ export default function Home() {
 
   const [advocates, setAdvocates] = useState([]);
   const [filteredAdvocates, setFilteredAdvocates] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     console.log("fetching advocates...");
@@ -16,6 +17,7 @@ export default function Home() {
       response.json().then((jsonResponse) => {
         setAdvocates(jsonResponse.data);
         setFilteredAdvocates(jsonResponse.data);
+        setIsLoading(false);
       });
     });
   }, []);
@@ -61,6 +63,7 @@ export default function Home() {
       </div>
       <br />
       <br />
+      {isLoading? <div>Loading...</div>: 
       <div className={classes.tableContainer}>
         <table className={classes.table}>
           <thead>
@@ -75,27 +78,27 @@ export default function Home() {
             </tr>
           </thead>
           <tbody>
-            {filteredAdvocates.map((advocate) => {
-              return (
-                <tr>
-                  <td>{advocate.firstName}</td>
-                  <td>{advocate.lastName}</td>
-                  <td>{advocate.city}</td>
-                  <td>{advocate.degree}</td>
-                  <td>
-                    {advocate.specialties.map((s) => (
-                      <div>{s}</div>
-                    ))}
-                  </td>
-                  <td>{advocate.yearsOfExperience}</td>
-                  <td>{advocate.phoneNumber}</td>
-                </tr>
-              );
-            })}
+            {filteredAdvocates.length ? 
+            filteredAdvocates.map((advocate) => {
+                return (
+                  <tr key={advocate.firstName}>
+                    <td>{advocate.firstName}</td>
+                    <td>{advocate.lastName}</td>
+                    <td>{advocate.city}</td>
+                    <td>{advocate.degree}</td>
+                    <td>
+                      {advocate.specialties.map((s) => (
+                        <div key={s}>{s}</div>
+                      ))}
+                    </td>
+                    <td>{advocate.yearsOfExperience}</td>
+                    <td>{advocate.phoneNumber}</td>
+                  </tr>
+                );
+            }) : <div className={classes.noResultsContainer}>No Results Found</div>}
           </tbody>
         </table>
-
-      </div>
+      </div>}
     </main>
   );
 }
