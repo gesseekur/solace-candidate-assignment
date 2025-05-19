@@ -2,9 +2,19 @@
 
 import { useEffect, useState } from "react";
 
+type Advocate = {
+  firstName: string;
+  lastName: string;
+  city: string;
+  degree: string;
+  specialties: string[];
+  yearsOfExperience: number;
+  phoneNumber: number;
+}
+
 export default function Home() {
-  const [advocates, setAdvocates] = useState([]);
-  const [filteredAdvocates, setFilteredAdvocates] = useState([]);
+  const [advocates, setAdvocates] = useState<Advocate[]>([]);
+  const [filteredAdvocates, setFilteredAdvocates] = useState<Advocate[]>([]);
 
   useEffect(() => {
     console.log("fetching advocates...");
@@ -16,10 +26,10 @@ export default function Home() {
     });
   }, []);
 
-  const onChange = (e) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement >) => {
     const searchTerm = e.target.value;
 
-    document.getElementById("search-term").innerHTML = searchTerm;
+    (document.getElementById('search-term') as HTMLDivElement).innerHTML = searchTerm;
 
     console.log("filtering advocates...");
     const filteredAdvocates = advocates.filter((advocate) => {
@@ -29,7 +39,7 @@ export default function Home() {
         advocate.city.includes(searchTerm) ||
         advocate.degree.includes(searchTerm) ||
         advocate.specialties.includes(searchTerm) ||
-        advocate.yearsOfExperience.includes(searchTerm)
+        advocate.yearsOfExperience === Number(searchTerm)
       );
     });
 
@@ -67,16 +77,16 @@ export default function Home() {
           <th>Phone Number</th>
         </thead>
         <tbody>
-          {filteredAdvocates.map((advocate) => {
+          {filteredAdvocates.map((advocate: Advocate) => {
             return (
-              <tr>
+              <tr key={advocate.firstName}>
                 <td>{advocate.firstName}</td>
                 <td>{advocate.lastName}</td>
                 <td>{advocate.city}</td>
                 <td>{advocate.degree}</td>
                 <td>
                   {advocate.specialties.map((s) => (
-                    <div>{s}</div>
+                    <div key={s}>{s}</div>
                   ))}
                 </td>
                 <td>{advocate.yearsOfExperience}</td>
