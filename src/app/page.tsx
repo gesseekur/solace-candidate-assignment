@@ -1,8 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useStyles } from './page.styles';
+import Image from 'next/image'
 
 export default function Home() {
+  const { classes } = useStyles();
+
   const [advocates, setAdvocates] = useState([]);
   const [filteredAdvocates, setFilteredAdvocates] = useState([]);
 
@@ -43,49 +47,55 @@ export default function Home() {
 
   return (
     <main style={{ margin: "24px" }}>
-      <h1>Solace Advocates</h1>
+      <div className={classes.logoContainer}><Image alt="Solace Logo" width={100} height={100} src="/solace-logo.png" /> Advocates</div>
       <br />
+      <hr/> 
       <br />
       <div>
-        <p>Search</p>
+        <p className={classes.title}>Search</p>
         <p>
           Searching for: <span id="search-term"></span>
         </p>
-        <input style={{ border: "1px solid black" }} onChange={onChange} />
-        <button onClick={onClick}>Reset Search</button>
+        <input id="search-input" placeholder="Type in your search here..." className={classes.input} onChange={onChange} />
+        <button className={classes.button} onClick={onClick}>Reset Search</button>
       </div>
       <br />
       <br />
-      <table>
-        <thead>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>City</th>
-          <th>Degree</th>
-          <th>Specialties</th>
-          <th>Years of Experience</th>
-          <th>Phone Number</th>
-        </thead>
-        <tbody>
-          {filteredAdvocates.map((advocate) => {
-            return (
-              <tr>
-                <td>{advocate.firstName}</td>
-                <td>{advocate.lastName}</td>
-                <td>{advocate.city}</td>
-                <td>{advocate.degree}</td>
-                <td>
-                  {advocate.specialties.map((s) => (
-                    <div>{s}</div>
-                  ))}
-                </td>
-                <td>{advocate.yearsOfExperience}</td>
-                <td>{advocate.phoneNumber}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      <div className={classes.tableContainer}>
+        <table className={classes.table}>
+          <thead>
+            <tr>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>City</th>
+              <th>Degree</th>
+              <th>Specialties</th>
+              <th>Years of Experience</th>
+              <th>Phone Number</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredAdvocates.map((advocate) => {
+              return (
+                <tr>
+                  <td>{advocate.firstName}</td>
+                  <td>{advocate.lastName}</td>
+                  <td>{advocate.city}</td>
+                  <td>{advocate.degree}</td>
+                  <td>
+                    {advocate.specialties.map((s) => (
+                      <div>{s}</div>
+                    ))}
+                  </td>
+                  <td>{advocate.yearsOfExperience}</td>
+                  <td>{advocate.phoneNumber}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+
+      </div>
     </main>
   );
 }
