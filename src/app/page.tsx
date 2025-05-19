@@ -21,6 +21,9 @@ export default function Home() {
     const searchTermLowercase = searchTerm.toLowerCase();
 
     (document.getElementById('search-term') as HTMLDivElement).innerHTML = searchTerm;
+
+    console.log("filtering advocates...");
+
     const filteredAdvocates = advocates.filter((advocate) => {
       const firstName = advocate.firstName.toLowerCase();
       const lastName = advocate.lastName.toLowerCase();
