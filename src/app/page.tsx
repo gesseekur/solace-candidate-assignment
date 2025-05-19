@@ -18,27 +18,48 @@ export default function Home() {
 
   const onChange = (e) => {
     const searchTerm = e.target.value;
+    const searchTermLowercase = searchTerm.toLowerCase();
 
-    document.getElementById("search-term").innerHTML = searchTerm;
-
-    console.log("filtering advocates...");
+    (document.getElementById('search-term') as HTMLDivElement).innerHTML = searchTerm;
     const filteredAdvocates = advocates.filter((advocate) => {
+      const firstName = advocate.firstName.toLowerCase();
+      const lastName = advocate.lastName.toLowerCase();
+      const city = advocate.city.toLowerCase();
+      const degree = advocate.degree.toLowerCase();
+      const specialties = advocate.specialties.map((s) => s.toLowerCase());
+      const yearsOfExperience = advocate.yearsOfExperience;
+      
       return (
-        advocate.firstName.includes(searchTerm) ||
-        advocate.lastName.includes(searchTerm) ||
-        advocate.city.includes(searchTerm) ||
-        advocate.degree.includes(searchTerm) ||
-        advocate.specialties.includes(searchTerm) ||
-        advocate.yearsOfExperience.includes(searchTerm)
+        firstName.includes(searchTermLowercase) ||
+        lastName.includes(searchTermLowercase) ||
+        city.includes(searchTermLowercase) ||
+        degree.includes(searchTermLowercase) ||
+        specialties.some((s) => s.includes(searchTermLowercase))  ||
+        yearsOfExperience === Number(searchTermLowercase)
       );
     });
-
     setFilteredAdvocates(filteredAdvocates);
   };
 
-  const onClick = () => {
+  const onResetClick = () => {
     console.log(advocates);
     setFilteredAdvocates(advocates);
+    (document.getElementById('search-input') as HTMLInputElement).value = '';
+    (document.getElementById('search-term') as HTMLDivElement).innerHTML = '';
+  };
+
+  const debounce = (
+    func: ((...args: any[]) => void ),
+    delay: number
+    ): ((...args: any[]) => void) => {
+      let timeoutId: ReturnType<typeof setTimeout>;
+
+      return (...args: any[]) => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+          func(...args);
+        }, delay);
+      };
   };
 
   return (
@@ -51,8 +72,8 @@ export default function Home() {
         <p>
           Searching for: <span id="search-term"></span>
         </p>
-        <input style={{ border: "1px solid black" }} onChange={onChange} />
-        <button onClick={onClick}>Reset Search</button>
+        <input id="search-input" style={{ border: "1px solid black" }} onChange={debounce(onChange, 500)} />
+        <button onClick={onResetClick}>Reset Search</button>
       </div>
       <br />
       <br />
