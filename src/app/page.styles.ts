@@ -40,7 +40,7 @@ export const useStyles = makeStyles()(() => ({
                 textAlign: 'center',
                 padding: 20,
             },
-            '> tr:nth-child(even)': {
+            '> tr:nth-of-type(even)': {
                 backgroundColor: '#F7F7F7',
             }
         }
